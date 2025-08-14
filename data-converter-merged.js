@@ -77,6 +77,9 @@ function mergeArrayTypes(inputData) {
     
     for (const [namespace, types] of Object.entries(inputData.typesByNamespace)) {
         for (const type of types) {
+            // Ensure each type has the namespace property
+            type.namespace = namespace;
+            
             if (type.kind === 'array' && type.name.endsWith('[]')) {
                 // This is an array type
                 const baseName = type.name.slice(0, -2);
