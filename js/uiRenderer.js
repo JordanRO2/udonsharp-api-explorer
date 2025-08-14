@@ -143,7 +143,7 @@ export class UIRenderer {
         document.getElementById('typeStatus').className = `type-status ${type.isExposed ? 'exposed' : 'not-exposed'}`;
         
         // Update info
-        document.getElementById('typeFullName').textContent = type.fullName;
+        document.getElementById('typeFullName').textContent = Utils.cleanGenericType(type.fullName);
         document.getElementById('typeNamespace').textContent = type.namespace || 'Global';
         document.getElementById('typeMemberCount').textContent = 
             `${type.exposedMemberCount} exposed / ${type.memberCount} total`;
@@ -222,7 +222,7 @@ export class UIRenderer {
             <span class="member-status">${member.isExposed ? '✅' : '❌'}</span>
             <span class="member-name">${displayName}</span>
             ${member.returnType && member.returnType !== 'void' ? 
-              `<span class="member-return">→ ${Utils.formatTypeName(member.returnType)}</span>` : ''}
+              `<span class="member-return">→ ${Utils.cleanGenericType(Utils.formatTypeName(member.returnType))}</span>` : ''}
         `;
         
         div.appendChild(header);
@@ -262,7 +262,7 @@ export class UIRenderer {
         
         const code = document.createElement('code');
         code.className = 'udon-name';
-        code.textContent = udonName;
+        code.textContent = Utils.cleanGenericType(udonName);
         code.dataset.udon = udonName;
         code.onclick = () => Utils.copyToClipboard(udonName);
         
@@ -337,7 +337,7 @@ export class UIRenderer {
 
     // Generate method syntax
     generateMethodSyntax(methodName, paramList, returnType, objName) {
-        const returnTypeStr = Utils.formatTypeName(returnType || 'void');
+        const returnTypeStr = Utils.cleanGenericType(Utils.formatTypeName(returnType || 'void'));
         
         // Special cases
         const specialMethods = {

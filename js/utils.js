@@ -1,6 +1,18 @@
 // Utility functions module
 
 export const Utils = {
+    // Clean up generic type notation
+    cleanGenericType(typeName) {
+        if (!typeName) return typeName;
+        // Convert IEnumerable`1 to IEnumerable<T>
+        return typeName.replace(/`(\d+)/g, (match, count) => {
+            const n = parseInt(count);
+            if (n === 1) return '<T>';
+            const params = Array(n).fill('T').map((t, i) => i > 0 ? `T${i+1}` : 'T').join(', ');
+            return `<${params}>`;
+        });
+    },
+    
     // Format type names for display
     formatTypeName(udonType) {
         if (!udonType) return 'void';
