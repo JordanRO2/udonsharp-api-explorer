@@ -80,6 +80,15 @@ function mergeArrayTypes(inputData) {
             // Ensure each type has the namespace property
             type.namespace = namespace;
             
+            // Clean up generic type names for display
+            if (type.name && type.name.includes('`')) {
+                // Convert IEnumerable`1 to IEnumerable<T>
+                type.name = type.name.replace(/`(\d+)/, (match, count) => {
+                    const params = Array(parseInt(count)).fill('T').map((t, i) => i > 0 ? `T${i+1}` : 'T').join(', ');
+                    return `<${params}>`;
+                });
+            }
+            
             if (type.kind === 'array' && type.name.endsWith('[]')) {
                 // This is an array type
                 const baseName = type.name.slice(0, -2);

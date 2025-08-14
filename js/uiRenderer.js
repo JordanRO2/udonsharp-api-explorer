@@ -477,14 +477,20 @@ export class UIRenderer {
             // Click handler for code
             const code = div.querySelector('code');
             if (code) {
-                code.onclick = (e) => {
+                code.addEventListener('click', (e) => {
                     e.stopPropagation();
                     Utils.copyToClipboard(result.udonName);
-                };
+                });
             }
             
             // Click handler for result
-            div.onclick = () => window.app.loadType(result.typeFullName);
+            div.addEventListener('click', () => {
+                if (window.app && window.app.loadType) {
+                    window.app.loadType(result.typeFullName);
+                } else {
+                    console.error('App not initialized or loadType not available');
+                }
+            });
             
             memberContainer.appendChild(div);
         });
