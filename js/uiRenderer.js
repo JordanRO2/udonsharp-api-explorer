@@ -40,7 +40,9 @@ export class UIRenderer {
             // Skip namespace if no types match after filtering
             if (types.length === 0) return;
             
-            const exposedCount = allTypes.filter(t => t.isExposed).length;
+            // Count types with exposed members (practical exposure)
+            const typesWithExposedMembers = allTypes.filter(t => t.exposedMemberCount > 0).length;
+            const totalTypes = allTypes.length;
             
             // Highlight namespace if it matches search
             const displayName = namespace || 'Global';
@@ -48,8 +50,8 @@ export class UIRenderer {
             
             const namespaceDiv = this.createNamespaceNode(
                 displayName,
-                exposedCount,
-                allTypes.length,
+                typesWithExposedMembers,
+                totalTypes,
                 types,
                 isNamespaceMatch
             );
