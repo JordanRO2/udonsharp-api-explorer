@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Namespace Search</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div style="padding: 20px;">
+        <h1>Test Namespace Filtering</h1>
+        
+        <div class="search-container" style="margin: 20px 0;">
+            <input type="text" id="testSearch" placeholder="Test search..." style="width: 300px; padding: 10px;">
+            <button onclick="testSearch()">Test Search</button>
+        </div>
+        
+        <div id="results"></div>
+        
+        <h2>Test Long Namespace Names</h2>
+        <div class="namespace-node" style="max-width: 400px; border: 1px solid #ccc;">
+            <div class="namespace-header">
+                <span class="expand-icon">▶</span>
+                <span class="namespace-name" title="This is a very long namespace name that should be truncated with ellipsis">
+                    Cinemachine.CinemachinePathBase.VeryLongNamespace.ThatShouldBeTruncated.WithEllipsis
+                </span>
+                <span class="namespace-count">10/20</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script type="module">
+        import { DataManager } from './js/dataManager.js';
+        
+        const dataManager = new DataManager();
+        dataManager.initialize();
+        
+        window.testSearch = function() {
+            const query = document.getElementById('testSearch').value;
+            const resultsDiv = document.getElementById('results');
+            
+            if (!query) {
+                resultsDiv.innerHTML = '<p>Enter a search query</p>';
+                return;
+            }
+            
+            // Test namespace filtering
+            const namespaces = dataManager.getNamespaces();
+            const matchingNamespaces = namespaces.filter(ns => 
+                ns.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            resultsDiv.innerHTML = '<h3>Matching Namespaces:</h3>';
+            if (matchingNamespaces.length > 0) {
+                resultsDiv.innerHTML += '<ul>';
+                matchingNamespaces.forEach(ns => {
+                    const types = dataManager.getTypesByNamespace(ns);
+                    resultsDiv.innerHTML += `<li>${ns} (${types.length} types)</li>`;
+                });
+                resultsDiv.innerHTML += '</ul>';
+            } else {
+                resultsDiv.innerHTML += '<p>No matching namespaces</p>';
+            }
+            
+            // Test type search within namespaces
+            const results = dataManager.search(query, { onlyExposed: false });
+            const typeResults = results.filter(r => r.isType);
+            
+            resultsDiv.innerHTML += '<h3>Types found:</h3>';
+            if (typeResults.length > 0) {
+                resultsDiv.innerHTML += '<ul>';
+                typeResults.slice(0, 10).forEach(result => {
+                    resultsDiv.innerHTML += `<li>${result.namespace}.${result.name}</li>`;
+                });
+                resultsDiv.innerHTML += '</ul>';
+                if (typeResults.length > 10) {
+                    resultsDiv.innerHTML += `<p>...and ${typeResults.length - 10} more</p>`;
+                }
+            } else {
+                resultsDiv.innerHTML += '<p>No types found</p>';
+            }
+        };
+    </script>
+</body>
+</html>

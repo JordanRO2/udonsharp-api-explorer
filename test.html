@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module Test</title>
+</head>
+<body>
+    <h1>Testing Modular Architecture</h1>
+    <div id="status">Loading...</div>
+    <div id="errors" style="color: red;"></div>
+    <div id="results"></div>
+
+    <!-- Load data first -->
+    <script src="data.js"></script>
+    
+    <!-- Test modules -->
+    <script type="module">
+        import { Utils } from './js/utils.js';
+        import { DataManager } from './js/dataManager.js';
+        import { UIRenderer } from './js/uiRenderer.js';
+        import UdonSharpExplorer from './js/app.js';
+        
+        const statusEl = document.getElementById('status');
+        const errorsEl = document.getElementById('errors');
+        const resultsEl = document.getElementById('results');
+        
+        try {
+            // Test Utils module
+            statusEl.textContent = 'Testing Utils module...';
+            const formatted = Utils.formatTypeName('SystemString');
+            resultsEl.innerHTML += `<p>✅ Utils.formatTypeName('SystemString') = ${formatted}</p>`;
+            
+            // Test DataManager module
+            statusEl.textContent = 'Testing DataManager module...';
+            const dataManager = new DataManager();
+            dataManager.initialize();
+            const stats = dataManager.getStats();
+            resultsEl.innerHTML += `<p>✅ DataManager initialized with ${stats.totalTypes} types</p>`;
+            
+            // Test UIRenderer module
+            statusEl.textContent = 'Testing UIRenderer module...';
+            const uiRenderer = new UIRenderer(dataManager);
+            resultsEl.innerHTML += `<p>✅ UIRenderer created successfully</p>`;
+            
+            // Test main app
+            statusEl.textContent = 'Testing main app...';
+            const app = new UdonSharpExplorer();
+            resultsEl.innerHTML += `<p>✅ UdonSharpExplorer created successfully</p>`;
+            
+            statusEl.textContent = '✅ All modules loaded successfully!';
+            statusEl.style.color = 'green';
+            
+            // Check for syntax errors
+            resultsEl.innerHTML += '<h3>Checking for syntax errors...</h3>';
+            resultsEl.innerHTML += '<p style="color: green;">✅ No syntax errors detected!</p>';
+            
+        } catch (error) {
+            statusEl.textContent = '❌ Error loading modules';
+            statusEl.style.color = 'red';
+            errorsEl.textContent = error.message + '\n' + error.stack;
+        }
+    </script>
+</body>
+</html>

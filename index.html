@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UdonSharp API Explorer</title>
+    <meta name="description" content="Interactive documentation for all available types and methods in UdonSharp for VRChat world development">
+    <meta name="keywords" content="UdonSharp, VRChat, API, Documentation, Unity, Udon">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="UdonSharp API Explorer">
+    <meta property="og:description" content="Interactive documentation for UdonSharp VRChat development">
+    <meta property="og:type" content="website">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>🔍 UdonSharp API Explorer</h1>
+                    <a href="https://github.com/JordanRO2/udonsharp-api-explorer" class="github-link" target="_blank">
+                        <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                        </svg>
+                        GitHub
+                    </a>
+                </div>
+                <div class="stats-bar">
+                    <span class="stat">
+                        <strong id="totalTypes">0</strong> Types
+                    </span>
+                    <span class="stat">
+                        <strong id="exposedTypes">0</strong> Exposed
+                    </span>
+                    <span class="stat">
+                        <strong id="totalMembers">0</strong> Members
+                    </span>
+                    <span class="stat">
+                        <strong id="exposedMembers">0</strong> Available
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search types, methods, properties..." autocomplete="off">
+                    <div class="search-filters">
+                        <label>
+                            <input type="checkbox" id="filterExposed" checked>
+                            Show only exposed
+                        </label>
+                    </div>
+                </div>
+
+                <div class="namespace-list">
+                    <h3>Namespaces</h3>
+                    <div id="namespaceTree" class="tree-view">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Loading Screen -->
+                <div id="loadingScreen" class="loading-screen">
+                    <div class="loader"></div>
+                    <p>Loading API data...</p>
+                </div>
+
+                <!-- Welcome Screen -->
+                <div id="welcomeScreen" class="welcome-screen" style="display: none;">
+                    <h2>Welcome to UdonSharp API Explorer</h2>
+                    <p>This interactive documentation contains all available types and methods in UdonSharp for VRChat world development.</p>
+                    
+                    <div class="quick-links">
+                        <h3>Quick Access</h3>
+                        <div class="quick-link-grid">
+                            <button data-type="UnityEngine.Transform">Transform</button>
+                            <button data-type="VRC.SDKBase.VRCPlayerApi">VRCPlayerApi</button>
+                            <button data-type="UnityEngine.GameObject">GameObject</button>
+                            <button data-type="UnityEngine.Vector3">Vector3</button>
+                            <button data-type="System.String">String</button>
+                            <button data-type="UnityEngine.Mathf">Mathf</button>
+                            <button data-type="UnityEngine.Time">Time</button>
+                            <button data-type="UnityEngine.Debug">Debug</button>
+                        </div>
+                    </div>
+                    
+                    <div class="usage-tips">
+                        <h3>Usage Tips</h3>
+                        <ul>
+                            <li>🔍 Use the search bar to find specific types or methods</li>
+                            <li>📁 Browse namespaces in the sidebar</li>
+                            <li>✅ Green items are exposed in UdonSharp</li>
+                            <li>❌ Red items are not available</li>
+                            <li>📋 Click on Udon names to copy them to clipboard</li>
+                            <li>⚡ Use filters to show only what you need</li>
+                        </ul>
+                    </div>
+
+                    <div class="common-patterns">
+                        <h3>Common UdonSharp Code Examples</h3>
+                        <div class="pattern-examples">
+                            <div class="pattern-card">
+                                <h4>Get Transform Position</h4>
+                                <code>Vector3 pos = transform.position;</code>
+                                <span class="udon-equivalent" data-udon="UnityEngineTransform.__get_position__UnityEngineVector3" title="Click to copy Udon name">→ UnityEngineTransform.__get_position__UnityEngineVector3</span>
+                            </div>
+                            <div class="pattern-card">
+                                <h4>Set GameObject Active</h4>
+                                <code>gameObject.SetActive(true);</code>
+                                <span class="udon-equivalent" data-udon="UnityEngineGameObject.__SetActive__SystemBoolean__SystemVoid" title="Click to copy Udon name">→ UnityEngineGameObject.__SetActive__SystemBoolean__SystemVoid</span>
+                            </div>
+                            <div class="pattern-card">
+                                <h4>Get Local Player</h4>
+                                <code>VRCPlayerApi player = Networking.LocalPlayer;</code>
+                                <span class="udon-equivalent" data-udon="VRCSDKBaseNetworking.__get_LocalPlayer__VRCSDKBaseVRCPlayerApi" title="Click to copy Udon name">→ VRCSDKBaseNetworking.__get_LocalPlayer__VRCSDKBaseVRCPlayerApi</span>
+                            </div>
+                            <div class="pattern-card">
+                                <h4>Teleport Player</h4>
+                                <code>player.TeleportTo(position, rotation);</code>
+                                <span class="udon-equivalent" data-udon="VRCSDKBaseVRCPlayerApi.__TeleportTo__UnityEngineVector3_UnityEngineQuaternion__SystemVoid" title="Click to copy Udon name">→ VRCSDKBaseVRCPlayerApi.__TeleportTo__UnityEngineVector3_UnityEngineQuaternion__SystemVoid</span>
+                            </div>
+                            <div class="pattern-card">
+                                <h4>Debug Log</h4>
+                                <code>Debug.Log("Hello World");</code>
+                                <span class="udon-equivalent" data-udon="UnityEngineDebug.__Log__SystemObject__SystemVoid" title="Click to copy Udon name">→ UnityEngineDebug.__Log__SystemObject__SystemVoid</span>
+                            </div>
+                            <div class="pattern-card">
+                                <h4>Instantiate Object</h4>
+                                <code>GameObject obj = VRCInstantiate(prefab);</code>
+                                <span class="udon-equivalent" data-udon="VRCInstantiate.__Instantiate__UnityEngineGameObject__UnityEngineGameObject" title="Click to copy Udon name">→ VRCInstantiate.__Instantiate__UnityEngineGameObject__UnityEngineGameObject</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Type Details View -->
+                <div id="typeDetails" class="type-details" style="display: none;">
+                    <div class="type-header">
+                        <span class="type-kind" id="typeKind"></span>
+                        <h2 id="typeName"></h2>
+                        <span class="type-status" id="typeStatus"></span>
+                    </div>
+                    
+                    <div class="type-info">
+                        <div class="info-row">
+                            <span class="label">Full Name:</span>
+                            <code id="typeFullName"></code>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Namespace:</span>
+                            <code id="typeNamespace"></code>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Members:</span>
+                            <span id="typeMemberCount"></span>
+                        </div>
+                    </div>
+
+                    <div class="members-container">
+                        <div class="member-section">
+                            <h3>Constructors <span class="count" id="constructorCount"></span></h3>
+                            <div id="constructorList" class="member-list"></div>
+                        </div>
+
+                        <div class="member-section">
+                            <h3>Methods <span class="count" id="methodCount"></span></h3>
+                            <div id="methodList" class="member-list"></div>
+                        </div>
+
+                        <div class="member-section">
+                            <h3>Properties <span class="count" id="propertyCount"></span></h3>
+                            <div id="propertyList" class="member-list"></div>
+                        </div>
+
+                        <div class="member-section">
+                            <h3>Fields <span class="count" id="fieldCount"></span></h3>
+                            <div id="fieldList" class="member-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Results -->
+                <div id="searchResults" class="search-results" style="display: none;">
+                    <h2>Search Results</h2>
+                    <div id="searchResultsList"></div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Generated from UdonSharp exposure data • <span id="exportDate"></span> • Made with ❤️ for VRChat creators</p>
+        </footer>
+    </div>
+
+    <!-- Load data first -->
+    <script src="data.js"></script>
+    <!-- Load modular app -->
+    <script type="module" src="js/app.js"></script>
+    <!-- Code highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+</body>
+</html>

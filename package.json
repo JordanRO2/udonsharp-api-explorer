@@ -1,0 +1,28 @@
+{
+  "name": "udonsharp-api-explorer",
+  "version": "1.0.0",
+  "description": "Interactive web-based documentation explorer for UdonSharp API",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080",
+    "convert": "node data-converter.js",
+    "update": "npm run convert && git add data.js && git commit -m 'Update API data' && git push"
+  },
+  "keywords": [
+    "udonsharp",
+    "vrchat",
+    "api",
+    "documentation",
+    "unity",
+    "udon"
+  ],
+  "author": "Jordan Rivera Rodriguez",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JordanRO2/udonsharp-api-explorer.git"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

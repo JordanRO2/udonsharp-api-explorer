@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Search</title>
+</head>
+<body>
+    <h1>Debug Search Functionality</h1>
+    <input type="text" id="searchInput" placeholder="Test search..." style="width: 300px; padding: 10px;">
+    <div id="results"></div>
+
+    <!-- Load data first -->
+    <script src="data.js"></script>
+    
+    <!-- Test search -->
+    <script type="module">
+        import { DataManager } from './js/dataManager.js';
+        
+        const dataManager = new DataManager();
+        const resultsDiv = document.getElementById('results');
+        
+        try {
+            // Initialize
+            dataManager.initialize();
+            resultsDiv.innerHTML = '<p>✅ DataManager initialized</p>';
+            
+            // Check data structure
+            resultsDiv.innerHTML += `<p>Total types: ${dataManager.apiData.totalTypes}</p>`;
+            resultsDiv.innerHTML += `<p>Namespaces: ${Object.keys(dataManager.apiData.typesByNamespace).length}</p>`;
+            
+            // Test search
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value;
+                if (query.length < 2) {
+                    resultsDiv.innerHTML = '<p>Type at least 2 characters...</p>';
+                    return;
+                }
+                
+                console.log('Searching for:', query);
+                const results = dataManager.search(query, { onlyExposed: false });
+                console.log('Results:', results);
+                
+                resultsDiv.innerHTML = `<h3>Results for "${query}": ${results.length} found</h3>`;
+                
+                if (results.length > 0) {
+                    resultsDiv.innerHTML += '<ul>';
+                    results.slice(0, 10).forEach(result => {
+                        if (result.isType) {
+                            resultsDiv.innerHTML += `<li>TYPE: ${result.fullName} (${result.isExposed ? '✅' : '❌'})</li>`;
+                        } else if (result.isMember) {
+                            resultsDiv.innerHTML += `<li>MEMBER: ${result.typeName}.${result.memberName} (${result.isExposed ? '✅' : '❌'})</li>`;
+                        }
+                    });
+                    resultsDiv.innerHTML += '</ul>';
+                    if (results.length > 10) {
+                        resultsDiv.innerHTML += `<p>...and ${results.length - 10} more results</p>`;
+                    }
+                }
+            });
+            
+            // Test with a known type
+            setTimeout(() => {
+                console.log('Testing search for "Vector3"...');
+                const testResults = dataManager.search('Vector3', { onlyExposed: false });
+                console.log('Vector3 search results:', testResults);
+                if (testResults.length === 0) {
+                    resultsDiv.innerHTML += '<p style="color: red;">⚠️ Search for "Vector3" returned no results - there may be an issue with the data structure</p>';
+                } else {
+                    resultsDiv.innerHTML += `<p style="color: green;">✅ Search for "Vector3" found ${testResults.length} results</p>`;
+                }
+            }, 1000);
+            
+        } catch (error) {
+            resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            console.error('Error:', error);
+        }
+    </script>
+</body>
+</html>

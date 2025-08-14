@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Source data files (keep only the processed data.js)
+udon_exposure_complete.json
+all_udon_names.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build output
+dist/
+build/
+
+# Local env files
+.env.local
+.env
