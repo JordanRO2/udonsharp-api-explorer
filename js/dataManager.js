@@ -51,7 +51,12 @@ export class DataManager {
     // Get types by namespace
     getTypesByNamespace(namespace, onlyExposed = false) {
         const types = this.apiData.typesByNamespace[namespace] || [];
-        return onlyExposed ? types.filter(t => t.isExposed) : types;
+        if (onlyExposed) {
+            // When filtering for exposed, only show types with exposed members
+            // This is more practical than showing types marked as exposed but with 0 usable members
+            return types.filter(t => t.exposedMemberCount > 0);
+        }
+        return types;
     }
 
     // Find type by full name
@@ -84,7 +89,8 @@ export class DataManager {
                 // Search in type name
                 if (type.name.toLowerCase().includes(lowerQuery) ||
                     type.fullName.toLowerCase().includes(lowerQuery)) {
-                    if (!onlyExposed || type.isExposed) {
+                    // When filtering, only include types with exposed members
+                    if (!onlyExposed || type.exposedMemberCount > 0) {
                         results.push({
                             isType: true,
                             fullName: type.fullName,
