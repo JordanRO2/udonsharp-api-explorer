@@ -169,6 +169,11 @@ export class UIRenderer {
         const count = document.getElementById(countId);
         
         container.innerHTML = '';
+        
+        // Separate array members from regular members
+        const regularMembers = members.filter(m => !m.isArrayMember);
+        const arrayMembers = members.filter(m => m.isArrayMember);
+        
         count.textContent = `(${members.length})`;
         
         if (members.length === 0) {
@@ -176,10 +181,30 @@ export class UIRenderer {
             return;
         }
         
-        members.forEach(member => {
-            const memberElement = this.createMemberElement(member, currentType);
-            container.appendChild(memberElement);
-        });
+        // Display regular members first
+        if (regularMembers.length > 0) {
+            regularMembers.forEach(member => {
+                const memberElement = this.createMemberElement(member, currentType);
+                container.appendChild(memberElement);
+            });
+        }
+        
+        // Display array members with a separator if both exist
+        if (arrayMembers.length > 0 && regularMembers.length > 0) {
+            const separator = document.createElement('div');
+            separator.className = 'array-separator';
+            separator.innerHTML = '<span>Array Operations</span>';
+            container.appendChild(separator);
+        }
+        
+        // Display array members
+        if (arrayMembers.length > 0) {
+            arrayMembers.forEach(member => {
+                const memberElement = this.createMemberElement(member, currentType);
+                memberElement.classList.add('array-member');
+                container.appendChild(memberElement);
+            });
+        }
     }
 
     // Create member element

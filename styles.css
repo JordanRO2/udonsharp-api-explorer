@@ -801,6 +801,27 @@ header {
     font-style: italic;
 }
 
+.array-separator {
+    margin: 1.5rem 0;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(90deg, transparent, var(--primary-color-faint), transparent);
+    position: relative;
+    text-align: center;
+}
+
+.array-separator span {
+    background: var(--bg-secondary);
+    padding: 0 1rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.array-member {
+    background: rgba(139, 92, 246, 0.05);
+    border-left: 3px solid var(--primary-color-faint);
+}
+
 /* Search Results */
 .search-results {
     animation: fadeIn 0.3s ease;
